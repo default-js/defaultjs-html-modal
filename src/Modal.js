@@ -1,16 +1,18 @@
 /* imports */
-import Component from "@default-js/defaultjs-html-components";
-import {define} from "@default-js/defaultjs-html-components/src/utils/DefineComponentHelper";
-import {Renderer, Template} from "@default-js/defaultjs-template-language";
+import { Component } from "@default-js/defaultjs-html-components";
+import { define } from "@default-js/defaultjs-html-components/src/utils/DefineComponentHelper";
+import { Renderer, Template } from "@default-js/defaultjs-template-language";
 
-import {NODENAME_MODAL, NODENAME_BACKPANEL, NODENAME_BODY, NODENAME_CONTENT, NODENAME_HEADER, NODENAME_FOOTER } from "./Constants";
-import {EVENT_SHOW, EVENT_SHOWING, EVENT_HIDE, EVENT_HIDING} from "./Events";
+import { NODENAME_MODAL, NODENAME_BACKPANEL, NODENAME_BODY, NODENAME_CONTENT, NODENAME_HEADER, NODENAME_FOOTER } from "./Constants";
+import { EVENT_SHOW, EVENT_SHOWING, EVENT_HIDE, EVENT_HIDING } from "./Events";
+import SETTING from "./Setting";
 
+
+const ATTRIBUTE_OPEN = "open";
 const ATTRIBUTE_CLOSABLE = "closable";
 const ATTRIBUTES = [];
 
-const TEMPLATE_BASEPATH = "/template/modal/";
-const TEMPLATE = Template.load(new URL(TEMPLATE_BASEPATH + "default.tpl.html", location));
+const TEMPLATE = Template.load(new URL(SETTING.baseTemplatePath + "default.tpl.html", location));
 
 const render = async (modal) => {
 	if (!modal.rendered) {
@@ -48,9 +50,8 @@ class Modal extends Component {
 				container: root,
 				data: this,
 				template: await TEMPLATE,
-				mode: "append"
+				mode: "append",
 			});
-			this.container = this.parent();
 			this.modalBackPanel = root.find(NODENAME_BACKPANEL).first();
 			this.modalContent = root.find(NODENAME_CONTENT).first();
 
@@ -82,16 +83,14 @@ class Modal extends Component {
 	async show() {
 		await this.ready;
 		await render(this);
-		document.body.append(this);
-		this.modalBackPanel.show();
+		this.attr(ATTRIBUTE_OPEN, "");
 	}
 
 	async hide() {
 		await this.ready;
-		this.modalBackPanel.hide();
-		this.container.append(this);
+		this.attr(ATTRIBUTE_OPEN, null);
 	}
 }
 
 define(Modal);
-return Modal;
+export default Modal;
