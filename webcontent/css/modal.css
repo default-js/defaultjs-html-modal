@@ -6,3 +6,24 @@ d-modal, d-modal-backpanel, d-modal-content, d-modal-header, d-modal-body, d-mod
 d-modal:not([open]) {
     display: none;
 }
+
+d-modal {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    background-color: rgba(0,0,0,0.4);
+    overflow: hidden;
+}
+
+d-modal-content {
+    position: relative;
+    background-color: #fff;
+    margin: auto;
+    padding: 1rem;
+    max-width: 90vw;
+    max-height: 90vh;
+}
+

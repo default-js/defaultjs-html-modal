@@ -2,28 +2,32 @@
 import { Component } from "@default-js/defaultjs-html-components";
 import { define } from "@default-js/defaultjs-html-components/src/utils/DefineComponentHelper";
 import { Renderer, Template } from "@default-js/defaultjs-template-language";
+import { privateProperty } from "@default-js/defaultjs-common-utils/src/PrivateProperty";
 
+import Backpanel from "./BackPanel";
+import Content from "./Content";
 import { NODENAME_MODAL, NODENAME_BACKPANEL, NODENAME_BODY, NODENAME_CONTENT, NODENAME_HEADER, NODENAME_FOOTER } from "./Constants";
 import { EVENT_SHOW, EVENT_SHOWING, EVENT_HIDE, EVENT_HIDING } from "./Events";
 import SETTING from "./Setting";
-
+import { highestZindex } from "./Utils";
 
 const ATTRIBUTE_OPEN = "open";
 const ATTRIBUTE_CLOSABLE = "closable";
 const ATTRIBUTES = [];
 
-const TEMPLATE = Template.load(new URL(SETTING.baseTemplatePath + "default.tpl.html", location));
 
 const render = async (modal) => {
-	if (!modal.rendered) {
-		const { root, modalContent } = modal;
+	const root = modal.root;
+	if (!(root.firstElementChild instanceof Content)) {
+		const content = new Content();
+		content.append(modal.childNodes);
 
-		modalContent.append(root.find(":scope >" + NODENAME_HEADER));
-		modalContent.append(root.find(":scope >" + NODENAME_BODY));
-		modalContent.append(root.find(":scope >" + NODENAME_FOOTER));
-
-		modal.rendered = true;
+		root.append(content);
 	}
+
+	const zindex = highestZindex({ f: (element) => element != modal }) + SETTING.zindexStep;
+	modal.style.position = "fixed";
+	modal.style.zIndex = Math.max(zindex, SETTING.minZindex);
 };
 
 /* logic */
@@ -46,38 +50,25 @@ class Modal extends Component {
 		await super.init();
 		const { root, ready } = this;
 		if (!ready.resolved) {
-			await Renderer.render({
-				container: root,
-				data: this,
-				template: await TEMPLATE,
-				mode: "append",
+			this.on(EVENT_SHOW, ({ target }) => {
+				if (target != this) this.show();
 			});
-			this.modalBackPanel = root.find(NODENAME_BACKPANEL).first();
-			this.modalContent = root.find(NODENAME_CONTENT).first();
+
+			this.on(EVENT_HIDE, (event) => {
+				event.preventDefault();
+				event.stopPropagation();
+				this.hide();
+			});
 
 			if (this.hasAttribute(ATTRIBUTE_CLOSABLE))
-				this.modalBackPanel.on("click", (event) => {
-					if (event.target == this.modalBackPanel) {
+				this.on("click", (event) => {
+					if (event.target == this) {
 						event.preventDefault();
 						event.stopPropagation();
 						this.hide();
 					}
 				});
-
-			this.on(EVENT_SHOW, ({ target }) => {
-				if (target != this) this.show();
-			});
-
-			root.on(EVENT_HIDE, (event) => {
-				event.preventDefault();
-				event.stopPropagation();
-				this.hide();
-			});
 		}
-	}
-
-	get root() {
-		return this.shadowRoot || this;
 	}
 
 	async show() {
@@ -89,6 +80,8 @@ class Modal extends Component {
 	async hide() {
 		await this.ready;
 		this.attr(ATTRIBUTE_OPEN, null);
+
+		this.style.zindex = null;
 	}
 }
 
