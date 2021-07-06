@@ -1,8 +1,7 @@
 const SETTING = {
-	baseTemplatePath: "/template/notification/",
-	template: "default.display.tpl.html",
-	messageTemplate: "default.message.tpl.html",
-	messageTTL: 10000
+	baseTemplatePath: "/template/modal/",
+	minZindex : 10000,
+	minStep: 1000
 };
 
 

@@ -1,7 +1,18 @@
 import SETTING from "./src/Setting";
-import Message from "./src/Message";
-import Display from "./src/Display";
-import {notify, closeNotify} from "./src/API";
+import Modal from "./src/Modal";
+import BackPanel from "./src/BackPanel";
+import Content from "./src/Content";
+import Header from "./src/Header";
+import Body from "./src/Body";
+import Footer from "./src/Footer";
 
-export {notify, closeNotify, SETTING, Message, Display}
 
+export {
+    SETTING,
+    Modal,
+    BackPanel,
+    Content,
+    Header,
+    Body,
+    Footer
+}

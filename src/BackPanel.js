@@ -1,5 +1,5 @@
 /* imports */
-import Component from "@default-js/defaultjs-html-components";
+import Component from "@default-js/defaultjs-html-components/src/Component";
 import {define} from "@default-js/defaultjs-html-components/src/utils/DefineComponentHelper"
 
 import { NODENAME_BACKPANEL } from "./Constants";
@@ -7,7 +7,7 @@ import { NODENAME_BACKPANEL } from "./Constants";
 /*constants */
 
 /* logic */
-class Content extends Component {
+class BackPanel extends Component {
 	static get NODENAME() {
 		return NODENAME_BACKPANEL;
 	}
@@ -16,5 +16,5 @@ class Content extends Component {
 	}
 };
 
-define(Content);
-return Content;
+define(BackPanel);
+export default BackPanel;

@@ -1,5 +1,5 @@
 /* imports */
-import Component from "@default-js/defaultjs-html-components";
+import Component from "@default-js/defaultjs-html-components/src/Component";
 import { define } from "@default-js/defaultjs-html-components/src/utils/DefineComponentHelper";
 
 import { NODENAME_BODY } from "./Constants";

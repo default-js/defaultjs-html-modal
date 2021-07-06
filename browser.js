@@ -1,16 +1,8 @@
-import SETTING from "./src/Setting";
-import Message from "./src/Message";
-import Display from "./src/Display";
-import { notify, closeNotify } from "./src/API";
+import { Modal, SETTING} from "./index";
 
 window.defaultjs = window.defaultjs || {};
 window.defaultjs.html = window.defaultjs.html || {};
-window.defaultjs.html.notification = defaultjs.html.notification || {
-	API: {
-		notify,
-		closeNotify,
-	},
-	SETTING,
-	Message,
-	Display
+window.defaultjs.html.modal = defaultjs.html.modal || {
+	Modal,
+	SETTING
 };

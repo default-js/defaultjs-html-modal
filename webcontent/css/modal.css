@@ -1,0 +1,8 @@
+
+d-modal, d-modal-backpanel, d-modal-content, d-modal-header, d-modal-body, d-modal-footer{
+    display: block;
+}
+
+d-modal:not([open]) {
+    display: none;
+}
