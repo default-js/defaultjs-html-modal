@@ -1,58 +1,66 @@
 {
-		"name": "defaultjs-html-modal",
-		"version": "1.0.0",
-		"description": "",
-		"main": "index.js",
-		"directories": {
-				"test": "test"
-		},
-		"devDependencies": {
-				"karma": "^6.3.4",
-				"karma-chrome-launcher": "^3.1.0",
-				"karma-coverage": "^2.0.3",
-				"karma-firefox-launcher": "^2.1.1",
-				"karma-html2js-preprocessor": "^1.1.0",
-				"karma-jasmine": "^4.0.1",
-				"karma-safari-launcher": "^1.0.0",
-				"karma-sourcemap-loader": "^0.3.8",
-				"karma-webpack": "^5.0.0",
-				"puppeteer": "^10.0.0",
-				"replace-in-file-webpack-plugin": "^1.0.6",
-				"webpack": "^5.40.0",
-				"webpack-cli": "^4.7.2",
-				"webpack-dev-server": "^3.11.2",
-				"webpack-merge": "^5.8.0"
-		},
-		"dependencies": {
-				"@default-js/defaultjs-common-utils": "^0.14.1",
-				"@default-js/defaultjs-expression-language": "^1.0.0-beta.14",
-				"@default-js/defaultjs-extdom": "^1.0.4",
-				"@default-js/defaultjs-html-components": "^2.0.0",
-				"@default-js/defaultjs-template-language": "^1.1.5"
-		},
-		"scripts": {
-				"build-only": "webpack --config webpack.prod.js && webpack --config webpack.dev.js",
-				"build": "npm test && webpack --config webpack.prod.js && webpack --config webpack.dev.js",
-				"//dev:live": "webpack-dev-server --open --config webpack.dev-server.js && npm run test:live",
-				"dev:live": "webpack serve --config webpack.dev-server.js --open",
-				"test:live": "karma start karma.live.js",
-				"test:integration": "karma start karma.integration.js",
-				"test": "karma start karma.test.js"
-		},
-		"repository": {
-				"type": "git",
-				"url": "git+https://github.com/default-js/defaultjs-html-modal.git"
-		},
-		"keywords": [
-				"web component",
-				"dialog",
-				"modal",
-				"html"
-		],
-		"author": "Frank Schüler",
-		"license": "MIT",
-		"bugs": {
-				"url": "https://github.com/default-js/defaultjs-html-modal/issues"
-		},
-		"homepage": "https://github.com/default-js/defaultjs-html-modal#readme"
+	"name": "defaultjs-html-modal",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/default-js/defaultjs-html-modal.git"
+	},
+	"keywords": [
+		"web component",
+		"dialog",
+		"modal",
+		"html"
+	],
+	"author": "Frank Schüler",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/default-js/defaultjs-html-modal/issues"
+	},
+	"homepage": "https://github.com/default-js/defaultjs-html-modal#readme",
+	"scripts": {
+		"build-only": "webpack --config webpack.prod.js && webpack --config webpack.dev.js",
+		"build": "npm test && webpack --config webpack.prod.js && webpack --config webpack.dev.js",
+		"//dev:live": "webpack-dev-server --open --config webpack.dev-server.js && npm run test:live",
+		"dev:live": "webpack serve --config webpack.dev-server.js --open",
+		"test:live": "karma start karma.live.js",
+		"test:integration": "karma start karma.integration.js",
+		"test": "karma start karma.test.js"
+	},
+	"devDependencies": {
+		"karma": "^6.3.4",
+		"karma-chrome-launcher": "^3.1.0",
+		"karma-coverage": "^2.0.3",
+		"karma-firefox-launcher": "^2.1.1",
+		"karma-html2js-preprocessor": "^1.1.0",
+		"karma-jasmine": "^4.0.1",
+		"karma-safari-launcher": "^1.0.0",
+		"karma-sourcemap-loader": "^0.3.8",
+		"karma-webpack": "^5.0.0",
+		"puppeteer": "^10.0.0",
+		"replace-in-file-webpack-plugin": "^1.0.6",
+		"webpack": "^5.40.0",
+		"webpack-cli": "^4.7.2",
+		"webpack-dev-server": "^3.11.2",
+		"webpack-merge": "^5.8.0"
+	},
+	"dependencies": {
+		"@default-js/defaultjs-common-utils": "^0.14.1",
+		"@default-js/defaultjs-expression-language": "^1.0.0-beta.14",
+		"@default-js/defaultjs-extdom": "^1.0.4",
+		"@default-js/defaultjs-html-components": "^2.0.0",
+		"@default-js/defaultjs-template-language": "^1.1.5"
+	},
+	"directories": {
+		"test": "test"
+	},
+	"files": [
+		"index.js",
+		"bundle-browser.js",
+		"bundle-standalone.js",
+		"src/**",
+		"LICENSE",
+		"README.md"
+	]
 }

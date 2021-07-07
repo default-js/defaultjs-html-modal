@@ -1,20 +1,26 @@
 /* imports */
 import { Component } from "@default-js/defaultjs-html-components";
 import { define } from "@default-js/defaultjs-html-components/src/utils/DefineComponentHelper";
-import { Renderer, Template } from "@default-js/defaultjs-template-language";
 import { privateProperty } from "@default-js/defaultjs-common-utils/src/PrivateProperty";
 
-import Backpanel from "./BackPanel";
 import Content from "./Content";
-import { NODENAME_MODAL, NODENAME_BACKPANEL, NODENAME_BODY, NODENAME_CONTENT, NODENAME_HEADER, NODENAME_FOOTER } from "./Constants";
+import { NODENAME_MODAL } from "./Constants";
 import { EVENT_SHOW, EVENT_SHOWING, EVENT_HIDE, EVENT_HIDING } from "./Events";
 import SETTING from "./Setting";
 import { highestZindex } from "./Utils";
 
 const ATTRIBUTE_OPEN = "open";
+const ATTRIBUTE_HIDE_TRIGGER = "modal-hide";
 const ATTRIBUTE_CLOSABLE = "closable";
 const ATTRIBUTES = [];
 
+const hideTriggers = new WeakSet();
+
+const modalHideHandle = (event) => {
+	event.preventDefault();
+	event.stopPropagation();
+	event.target.trigger(EVENT_HIDE);
+};
 
 const render = async (modal) => {
 	const root = modal.root;
@@ -25,9 +31,33 @@ const render = async (modal) => {
 		root.append(content);
 	}
 
-	const zindex = highestZindex({ f: (element) => element != modal }) + SETTING.zindexStep;
+	setupHideHandles(root);
+	setStyle(modal);
+};
+
+const setStyle = (modal) => {
+	const zindex =
+		highestZindex({
+			f: (element) => {
+				if (element == modal) return false;
+				if (element.style.display == "none") return false;
+				if (element.style.visibility == "hidden") return false;
+
+				return true;
+			},
+		}) + SETTING.zindexStep;
 	modal.style.position = "fixed";
 	modal.style.zIndex = Math.max(zindex, SETTING.minZindex);
+};
+
+const setupHideHandles = (root) => {
+	const elements = root.find(`[${ATTRIBUTE_HIDE_TRIGGER}]`);
+	for (let element of elements) {
+		if (!hideTriggers.has(element)) {
+			element.on("click", modalHideHandle);
+			hideTriggers.add(element);
+		}
+	}
 };
 
 /* logic */
@@ -75,13 +105,14 @@ class Modal extends Component {
 		await this.ready;
 		await render(this);
 		this.attr(ATTRIBUTE_OPEN, "");
+		this.trigger(EVENT_SHOWING);
 	}
 
 	async hide() {
 		await this.ready;
 		this.attr(ATTRIBUTE_OPEN, null);
-
 		this.style.zindex = null;
+		this.trigger(EVENT_HIDING);
 	}
 }
 
