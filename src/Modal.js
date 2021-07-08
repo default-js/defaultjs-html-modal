@@ -1,6 +1,7 @@
 /* imports */
 import { Component } from "@default-js/defaultjs-html-components";
 import { define } from "@default-js/defaultjs-html-components/src/utils/DefineComponentHelper";
+import { Renderer, Template } from "@default-js/defaultjs-template-language";
 import { privateProperty } from "@default-js/defaultjs-common-utils/src/PrivateProperty";
 
 import Content from "./Content";
@@ -101,8 +102,12 @@ class Modal extends Component {
 		}
 	}
 
-	async show() {
-		await this.ready;
+	async show({ data = {}, template = null } = {}) {
+		const { ready, root } = this;
+		await ready;
+		if(template)
+			await Renderer.render({ data, template: await Template.load(template), container: root });
+
 		await render(this);
 		this.attr(ATTRIBUTE_OPEN, "");
 		this.trigger(EVENT_SHOWING);
