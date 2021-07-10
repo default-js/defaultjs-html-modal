@@ -11,9 +11,13 @@ import SETTING from "./Setting";
 import { highestZindex } from "./Utils";
 
 const ATTRIBUTE_OPEN = "open";
+const ATTRIBUTE_HASMODAL = "has-modal";
 const ATTRIBUTE_HIDE_TRIGGER = "modal-hide";
 const ATTRIBUTE_CLOSABLE = "closable";
+const ATTRIBUTE_TEMPLATE = "template";
 const ATTRIBUTES = [];
+
+const PRIVATE_TEMPLATE = "template";
 
 const hideTriggers = new WeakSet();
 
@@ -23,16 +27,22 @@ const modalHideHandle = (event) => {
 	event.target.trigger(EVENT_HIDE);
 };
 
-const render = async (modal) => {
+const getOrCreateContent = (modal) => {
 	const root = modal.root;
 	if (!(root.firstElementChild instanceof Content)) {
 		const content = new Content();
 		content.append(modal.childNodes);
 
 		root.append(content);
+		return content;
 	}
 
-	setupHideHandles(root);
+	return root.children[0];
+};
+
+const render = async (modal) => {
+	getOrCreateContent(modal);
+	setupHideHandles(modal);
 	setStyle(modal);
 };
 
@@ -51,7 +61,13 @@ const setStyle = (modal) => {
 	modal.style.zIndex = Math.max(zindex, SETTING.minZindex);
 };
 
-const setupHideHandles = (root) => {
+const clearStyle = ({style}) => {
+	style.position = null;
+	style.zIndex = null;
+};
+
+const setupHideHandles = (modal) => {
+	const root = modal.root;
 	const elements = root.find(`[${ATTRIBUTE_HIDE_TRIGGER}]`);
 	for (let element of elements) {
 		if (!hideTriggers.has(element)) {
@@ -80,6 +96,7 @@ class Modal extends Component {
 	async init() {
 		await super.init();
 		const { root, ready } = this;
+
 		if (!ready.resolved) {
 			this.on(EVENT_SHOW, ({ target }) => {
 				if (target != this) this.show();
@@ -89,6 +106,15 @@ class Modal extends Component {
 				event.preventDefault();
 				event.stopPropagation();
 				this.hide();
+			});
+
+			root.on([EVENT_SHOWING, EVENT_HIDING], ({type, target}) => {
+				if(target != this){
+					if(type == EVENT_SHOWING)
+						this.attr(ATTRIBUTE_HASMODAL, "");
+					else
+						this.attr(ATTRIBUTE_HASMODAL, null);
+				}
 			});
 
 			if (this.hasAttribute(ATTRIBUTE_CLOSABLE))
@@ -103,10 +129,17 @@ class Modal extends Component {
 	}
 
 	async show({ data = {}, template = null } = {}) {
-		const { ready, root } = this;
-		await ready;
-		if(template)
-			await Renderer.render({ data, template: await Template.load(template), container: root });
+		await this.ready;
+
+		if (!template && this.hasAttribute(ATTRIBUTE_TEMPLATE)) {
+			template = privateProperty(this, PRIVATE_TEMPLATE);
+			if (!template) {
+				template = await Template.load(new URL(this.attr(ATTRIBUTE_TEMPLATE), location));
+				privateProperty(this, PRIVATE_TEMPLATE, template);
+			}
+		}
+
+		if (template) await Renderer.render({ data, template: await Template.load(template), container: getOrCreateContent(this) });
 
 		await render(this);
 		this.attr(ATTRIBUTE_OPEN, "");
@@ -116,7 +149,7 @@ class Modal extends Component {
 	async hide() {
 		await this.ready;
 		this.attr(ATTRIBUTE_OPEN, null);
-		this.style.zindex = null;
+		clearStyle(this);
 		this.trigger(EVENT_HIDING);
 	}
 }
