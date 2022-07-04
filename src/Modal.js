@@ -99,7 +99,7 @@ class Modal extends Component {
 
 		if (!ready.resolved) {
 			this.on(EVENT_SHOW, ({ target }) => {
-				if (target != this) this.show();
+				if (target == this) this.show();
 			});
 
 			this.on(EVENT_HIDE, (event) => {

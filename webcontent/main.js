@@ -6,5 +6,5 @@ const openmodal = (element) => {
     if(modalId == "modal-2")
         modal.show({data: {text: "rendered content"}, template: new URL("/template/test.tpl.html", location)});
     else
-        modal.show();
+        modal.trigger("d-modal-event:show")
 };
