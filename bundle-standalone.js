@@ -1,2 +1,5 @@
 import "@default-js/defaultjs-extdom";
-import "./bundle-browser";
+import {Modal, Content,	SETTING} from "./bundle-browser";
+
+
+export {Modal, Content,	SETTING};

@@ -1,0 +1,5 @@
+{
+	"module": "./index.js",
+	"browser": "./bundle-browser.js",
+	"standalone": "./bundle-standalone.js"
+}

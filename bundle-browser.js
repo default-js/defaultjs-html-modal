@@ -9,3 +9,5 @@ window.defaultjs.html.modal = defaultjs.html.modal || {
 	Content,
 	SETTING
 };
+
+export {Modal, Content,	SETTING};

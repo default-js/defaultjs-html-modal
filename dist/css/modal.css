@@ -1,0 +1,42 @@
+d-modal {
+    --modal-background-color: #fff;
+    --modal-backdrop-color: rgba(0,0,0,0.4);    
+}
+
+
+d-modal, d-modal-backpanel, d-modal-content, d-modal-header, d-modal-body, d-modal-footer{
+    display: block;
+}
+
+d-modal:not([open]) {
+    display: none;
+}
+
+d-modal {
+    width: 100vw;
+    height: 100vh;
+    top: 0;    
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: var(--modal-backdrop-color);
+    overflow: hidden;
+}
+
+d-modal-content {
+    position: relative;
+    background-color: var(--modal-background-color);
+    margin: auto;
+    padding: 1rem;
+    
+    top: 15vh;
+    bottom: 15vh;
+
+    width: max-content;
+    height: max-content;
+    min-width: 50vw;
+    max-width: 90vw;
+    min-height: 10vh;
+    max-height: 70vh;
+}
+
